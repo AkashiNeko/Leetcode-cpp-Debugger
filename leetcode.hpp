@@ -1,4 +1,4 @@
-/************************************************************************\
+ /************************************************************************\
 |*      _      _                    _       _                           *|
 |*     / \    | | __   __ _   ___  | |__   (_)    LeetCode with C++     *|
 |*    / _ \   | |/ /  / _` | / __| | '_ \  | |    data:    2023-4-5     *|
@@ -102,8 +102,7 @@ inline bool __allIsDigit_LC__(string& num) {
 
 template <class T>
 vector<T> buildVector(string data) {
-    __assert_LC__(data.front() == '[' && data.back() == ']',
-        "输入的 LeetCode 列表不合法, 缺少方括号");
+    __assert_LC__(data.front() == '[' && data.back() == ']', "输入的 LeetCode 列表不合法, 缺少方括号");
     string copy;
     bool inQuote = false;
     for (char& ch : data) {
@@ -117,8 +116,13 @@ vector<T> buildVector(string data) {
     copy.back() = ',';
     size_t sz = copy.size();
     vector<T> result;
+    inQuote = false;
     for (int i = 1, j; i < sz; i = j + 1) {
-        for (j = i; copy[j] != ','; ++j);
+        for (j = i; inQuote || copy[j] != ','; ++j) {
+            if (copy[j] == '\"') {
+                inQuote = !inQuote;
+            }
+        }
         __assert_LC__(j > i, "输入的 LeetCode 列表不合法, 两个逗号之间没有内容");
         string sub;
         if (copy[i] == '\"') {
@@ -407,7 +411,7 @@ void showVector(vector<T>& vec, bool newLine = true) {
 // 你也可以使用 "showVector(vectorObject)" 打印 vector
 
 template <class T>
-ostream& operator<<(ostream& cout, vector<T> vec) {
+ostream& operator<<(ostream& cout, vector<T>& vec) {
     showVector<T>(vec, false);
     return cout;
 }
@@ -526,6 +530,158 @@ TreeNode* buildTree(string data) {
         }
     }
     return ans;
+}
+
+
+
+/***************************************  queue  ***************************************/
+
+// 查看一个队列中的所有元素
+// 
+// 复制一个新的队列，将元素依次出队并打印，不影响原队列
+//
+// ------------------------ Example ------------------------
+// 
+// queue<int> q({1, 2, 3});
+// 
+// showQueue(q);
+//
+// 输出:
+//
+// <- 1 - 2 - 3 <- queue
+// 
+// ---------------------------------------------------------
+// 
+// 你也可以使用 "cout << queueObject" 查看队列中的元素
+
+template<class T>
+void showQueue(queue<T>& q, bool newLine = true) {
+    if (q.empty()) {
+        cout << "queue<" << typeid(T).name() << ">: []" << endl;
+        return;
+    }
+    queue<T> tmp(q);
+    cout << '<';
+    while (!tmp.empty()) {
+        T& cur = tmp.front();
+        if constexpr (is_same_v<T, TreeNode*> || is_same_v<T, ListNode*>) { 
+            cout << "- " << cur->val << ' ';
+        }
+        else {
+            cout << "- " << cur << ' ';
+        }
+        tmp.pop();
+    }
+    cout << "<- queue";
+    if (newLine)
+        cout << endl;
+}
+
+
+
+// 查看一个队列中的所有元素
+// 
+// 复制一个新的队列，将元素依次出队并打印，不影响原队列
+//
+// ------------------------ Example ------------------------
+// 
+// queue<int> q({1, 2, 3});
+// 
+// cout << q << endl;
+//
+// 输出:
+//
+// <- 1 - 2 - 3 <- queue
+// 
+// ---------------------------------------------------------
+// 
+// 你也可以使用 "showQueue(queueObject)" 查看队列中的元素
+
+template <class T>
+ostream& operator<<(ostream& cout, queue<T> q) {
+    showQueue<T>(q, false);
+    return cout;
+}
+
+
+
+/***************************************  stack  ***************************************/
+
+// 查看一个栈中的所有元素
+//
+// 复制一个新的栈，然后将元素依次出栈，不影响原栈
+//
+// ------------------------ Example ------------------------
+//
+// stack<int> stk({1, 2, 3});
+//
+// showStack(stk);
+//
+// 输出:
+//
+// | 1 - 2 - 3 <<- stack
+//
+// ---------------------------------------------------------
+//
+// 你也可以使用 "cout << stackObject" 查看栈中的元素
+
+template <class T>
+void showStack(stack<T> stk, bool newLine = true) {
+    if (stk.empty()) {
+        cout << "stack<" << typeid(T).name() << ">: []" << endl;
+        return;
+    }
+    stack<T> tmp(stk);
+    vector<T> v;
+    while (!tmp.empty()) {
+        v.push_back(tmp.top());
+        tmp.pop();
+    }
+    reverse(v.begin(), v.end());
+    cout << "| ";
+    if constexpr (is_same_v<T, TreeNode*> || is_same_v<T, ListNode*>) {
+        cout << v.front()->val;
+    }
+    else {
+        cout << v.front();
+    }
+    for (size_t i = 1, sz = v.size(); i < sz; ++i) {
+        if constexpr (is_same_v<T, TreeNode*> || is_same_v<T, ListNode*>) {
+            cout << " - " << v[i]->val;
+        }
+        else {
+            cout << " - " << v[i];
+        }
+    }
+    cout << " <<- stack";
+    if (newLine)
+        cout << endl;
+}
+
+
+
+// 查看一个栈中的所有元素
+//
+// 复制一个新的栈，然后将元素依次出栈，不影响原栈
+//
+// ------------------------ Example ------------------------
+//
+// stack<int> stk({1, 2, 3});
+//
+// cout << stk << endl;
+//
+// 输出:
+//
+// | 1 - 2 - 3 <<- stack
+//
+// ---------------------------------------------------------
+//
+// 你也可以使用 "showStack(stackObject)" 查看栈中的元素
+
+template <class T>
+ostream& operator<<(ostream& cout, stack<int>& stk) {
+    showStack<T>(stk, false);
+    return cout;
 }
 
 }
