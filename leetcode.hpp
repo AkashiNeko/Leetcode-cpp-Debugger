@@ -66,6 +66,21 @@ struct TreeNode {
     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
 
+inline void __assert_LC__(bool assert, string errInfo) {
+    if (!assert) {
+        cerr << "ERROR: " << errInfo << endl;
+        exit(1);
+    }
+}
+
+inline bool __allIsDigit_LC__(string& num) {
+    for (char& ch : num) {
+        if (!isdigit(ch))
+            return false;
+    }
+    return true;
+}
+
 /*************************************  vector  ****************************************/
 
 
@@ -87,36 +102,57 @@ struct TreeNode {
 
 template <class T>
 vector<T> buildVector(string data) {
+    __assert_LC__(data.front() == '[' && data.back() == ']',
+        "输入的 LeetCode 列表不合法, 缺少方括号");
     string copy;
+    bool inQuote = false;
     for (char& ch : data) {
-        if (ch == ' ') continue;
+        if (ch == '\"')
+            inQuote = !inQuote;
+        if (!inQuote && ch == ' ')
+            continue;
         copy += ch;
     }
+    __assert_LC__(!inQuote, "双引号数量不匹配");
     copy.back() = ',';
     size_t sz = copy.size();
     vector<T> result;
     for (int i = 1, j; i < sz; i = j + 1) {
         for (j = i; copy[j] != ','; ++j);
+        __assert_LC__(j > i, "输入的 LeetCode 列表不合法, 两个逗号之间没有内容");
         string sub;
-        if (copy[i] == '\"')
+        if (copy[i] == '\"') {
             sub = copy.substr(i + 1, j - i - 2);
-        else
+        }
+        else {
             sub = copy.substr(i, j - i);
+        }
         T value;
-        if constexpr (is_same_v<T, int> || is_same_v<T, unsigned>)
+        if constexpr (is_same_v<T, int> || is_same_v<T, unsigned>) {
+            __assert_LC__(__allIsDigit_LC__(sub), "存在非数字字符");
             value = stoi(sub);
-        else if constexpr (is_same_v<T, long long>)
+        }
+        else if constexpr (is_same_v<T, long long>) {
+            __assert_LC__(__allIsDigit_LC__(sub), "存在非数字字符");
             value = stoll(sub);
-        else if constexpr (is_same_v<T, unsigned long long>)
+        }
+        else if constexpr (is_same_v<T, unsigned long long>) {
+            __assert_LC__(__allIsDigit_LC__(sub), "存在非数字字符");
             value = stoull(sub);
-        else if constexpr (is_same_v<T, float>)
+        }
+        else if constexpr (is_same_v<T, float>) {
             value = stof(sub);
-        else if constexpr (is_same_v<T, double>)
+        }
+        else if constexpr (is_same_v<T, double>) {
             value = stod(sub);
-        else if constexpr (is_same_v<T, string>)
+        }
+        else if constexpr (is_same_v<T, string>) {
             value = sub;
-        else if constexpr (is_same_v<T, char>)
+        }
+        else if constexpr (is_same_v<T, char>) {
+            __assert_LC__(sub.size() == 1, "输入的字符列表中, 字符宽度不等于1字节");
             value = sub.back();
+        }
         result.push_back(value);
     }
     return result;
