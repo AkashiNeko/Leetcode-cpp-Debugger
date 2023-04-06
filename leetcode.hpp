@@ -403,8 +403,6 @@ ostream& operator<<(ostream& cout, vector<T> vec) {
 // [1,2,3,null,null,4,5]
 //
 // ---------------------------------------------------------
-//
-// 你也可以使用 "showVector(vectorObject)" 打印 vector
 
 string treeToString(TreeNode* root) {
     if (!root)
@@ -440,7 +438,7 @@ string treeToString(TreeNode* root) {
 
 
 
-// Build a binary tree from LeetCode style list.
+// 从 LeetCode 列表构造二叉树
 // 
 // ------------------------ Example ------------------------
 // 
