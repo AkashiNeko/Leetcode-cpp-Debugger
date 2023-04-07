@@ -123,7 +123,7 @@ vector<T> buildVector(string data) {
                 inQuote = !inQuote;
             }
         }
-        __assert_LC__(j > i, "输入的 LeetCode 列表不合法, 两个逗号之间没有内容");
+        __assert_LC__(j != i, "输入的 LeetCode 列表不合法, 两个逗号之间没有内容");
         string sub;
         if (copy[i] == '\"') {
             sub = copy.substr(i + 1, j - i - 2);
@@ -681,6 +681,99 @@ void showStack(stack<T> stk, bool newLine = true) {
 template <class T>
 ostream& operator<<(ostream& cout, stack<int>& stk) {
     showStack<T>(stk, false);
+    return cout;
+}
+
+
+
+// 这里是构造list
+ListNode* buildList(string data) {
+    static unordered_set<char> chars = { ']', ',' };
+    __assert_LC__(data.front() == '[' && data.back() == ']', "输入的 LeetCode 列表不合法");
+    size_t sz = data.size(), cnt = 0;
+    for (size_t i = 0, j = 0; i < sz && j < sz; ++i, ++j) {
+        while (j < sz && data[j] == ' ') {
+            ++j; ++cnt;
+        }
+        if (i != j) {
+            data[i] = data[j];
+        }
+        __assert_LC__(isdigit(data[i]) || chars.count(data[i]), "列表中含有非法字符");
+    }
+    sz -= cnt;
+    data.resize(sz);
+    if (data.empty() || data == "[]") {
+        return nullptr;
+    }
+    data.back() = ',';
+    ListNode headPre;
+    ListNode* p = &headPre;
+    for (size_t i = 1, j; i < sz; i = j + 1) {
+        for (j = i; data[j] != ','; ++j);
+        __assert_LC__(j != i, "输入的 LeetCode 列表不合法, 两个逗号之间没有内容");
+        int cur = stoi(data.substr(i, j - i));
+        p->next = new ListNode(cur);
+        p = p->next;
+    }
+    return headPre.next;
+}
+
+ListNode* operator""_list(const char* arg, size_t n) {
+    return buildList(string(arg, n));
+}
+
+
+// 查看一个 LeetCode 链表中的所有元素
+//
+// ------------------------ Example ------------------------
+//
+// auto head = "[1,2,3]"_list;
+//
+// showList(head);
+//
+// 输出:
+//
+// 1 -> 2 -> 3 -> null
+//
+// ---------------------------------------------------------
+//
+// 你也可以使用 "cout << headPointer" 查看栈中的元素
+
+void showList(ListNode* ls, bool newLine = true) {
+    if (!ls) {
+        cout << "list: []";
+    }
+    else {
+        while (ls) {
+            cout << ls->val << " -> ";
+            ls = ls->next;
+        }
+        cout << "null";
+    }
+    if (newLine)
+        cout << endl;
+}
+
+
+
+// 查看一个 LeetCode 链表中的所有元素
+//
+// ------------------------ Example ------------------------
+//
+// auto head = "[1,2,3]"_list;
+//
+// cout << head << endl;
+//
+// 输出:
+//
+// 1 -> 2 -> 3 -> null
+//
+// ---------------------------------------------------------
+//
+// 你也可以使用 "showList(headPointer)" 查看栈中的元素
+
+ostream& operator<<(ostream& cout, ListNode* head) {
+    showList(head, false);
     return cout;
 }
 
