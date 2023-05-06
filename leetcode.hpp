@@ -1,4 +1,4 @@
- /************************************************************************\
+/************************************************************************\
 |*      _      _                    _       _                           *|
 |*     / \    | | __   __ _   ___  | |__   (_)    LeetCode with C++     *|
 |*    / _ \   | |/ /  / _` | / __| | '_ \  | |    data:    2023-4-5     *|
@@ -51,7 +51,7 @@ namespace ERR {
     const string QUOTE_MISMATCH = "引号不匹配";
     const string NOT_INTEGER = "不是整数";
     const string NOT_NUMBER = "不是数字";
-    const string NOT_CHAR = "不是数字";
+    const string NOT_CHAR = "不是字符";
     const string INCORRECT_FORMAT = "格式不正确";
     const string UNKNOWN_TYPE = "未知的类型";
 }
@@ -154,13 +154,13 @@ inline string __preproccess_LC__(const string& str) {
     return ans;
 }
 
-bool __isNumber_LC__(string& num) {
+bool __isNumber_LC__(string num) {
     while (!num.empty() && num.back() == ' ')
         num.pop_back();
     if (num.empty()) return false;
     if (!isdigit(num.back()) && num.back() != '.') return false;
     bool hasE = false, hasDot = false, hasDigit = false;
-    int sz = num.size(), i = 0;
+    size_t sz = num.size(), i = 0;
     while (num[i] == ' ') ++i;
     if (num[i] == '+' || num[i] == '-') ++i;
     while (i < sz) {
@@ -210,11 +210,13 @@ bool __isNumber_LC__(string& num) {
 //
 // ---------------------------------------------------------------------------
 
+
+
 template <class T>
 vector<T> build_vector(string data) {
     vector<string> elems = __splitList_LC__(__preproccess_LC__(data));
     vector<T> result;
-    for (string& elem : elems) {
+    for (const string& elem : elems) {
         T value;
         if constexpr (is_same_v<T, int> || is_same_v<T, unsigned>) {
             __assert_LC__(__isDigit_LC__(elem), ERR::NOT_NUMBER);
@@ -237,14 +239,17 @@ vector<T> build_vector(string data) {
             value = stod(elem);
         }
         else if constexpr (is_same_v<T, string>) {
-            value = elem;
+            value = elem.substr(1, elem.size() - 2);
         }
         else if constexpr (is_same_v<T, char>) {
-            __assert_LC__(elem.size() == 1, ERR::NOT_CHAR);
-            value = elem.back();
+            __assert_LC__(elem.size() == 3, ERR::NOT_CHAR);
+            value = elem.at(1);
         }
         else if constexpr (is_same_v<T, vector<int>> || is_same_v<T, vector<unsigned>>) {
             value = build_vector<int>(elem);
+        }
+        else if constexpr (is_same_v<T, vector<vector<int>>> || is_same_v<T, vector<vector<unsigned>>>) {
+            value = build_vector<vector<int>>(elem);
         }
         else if constexpr (is_same_v<T, vector<long long>>) {
             value = build_vector<long long>(elem);
@@ -259,7 +264,7 @@ vector<T> build_vector(string data) {
             value = build_vector<double>(elem);
         }
         else if constexpr (is_same_v<T, vector<string>>) {
-            value = build_vector<double>(string);
+            value = build_vector<string>(elem);
         }
         else if constexpr (is_same_v<T, vector<char>>) {
             value = build_vector<char>(elem);
@@ -397,10 +402,10 @@ inline vector<char> operator""_vector_char(const char* arg, size_t n) {
 // --------------------------------- Example ---------------------------------
 //
 // vector<int> vi = {1, 2, 3};
-// showVector(vi);
+// show_vector(vi);
 //
 // vector<string> vs = {"akashi", "neko"};
-// showVector(vs);
+// show_vector(vs);
 //
 // 输出:
 //
@@ -413,7 +418,7 @@ inline vector<char> operator""_vector_char(const char* arg, size_t n) {
 // 你也可以使用 "cout << vectorObject" 打印 vector
 
 template <class T>
-void showVector(vector<T>& vec, bool newLine = true) {
+void show_vector(vector<T>& vec, bool newLine = true) {
     if (vec.empty()) {
         cout << "vector<" << typeid(T).name() << ">: []" << endl;
         return;
@@ -505,11 +510,11 @@ void showVector(vector<T>& vec, bool newLine = true) {
 //
 // ---------------------------------------------------------------------------
 //
-// 你也可以使用 "showVector(vectorObject)" 打印 vector
+// 你也可以使用 "show_vector(vectorObject)" 打印 vector
 
 template <class T>
 inline ostream& operator<<(ostream& cout, vector<T> vec) {
-    showVector<T>(vec, false);
+    show_vector<T>(vec, false);
     return cout;
 }
 
@@ -549,11 +554,9 @@ string treeToString(TreeNode* root) {
         while (sz--) {
             auto cur = q.front();
             q.pop();
-            if (cur->left)
-                q.push(cur->left);
+            if (cur->left) q.push(cur->left);
             seq.push_back(cur->left);
-            if (cur->right)
-                q.push(cur->right);
+            if (cur->right) q.push(cur->right);
             seq.push_back(cur->right);
         }
     }
@@ -568,6 +571,8 @@ string treeToString(TreeNode* root) {
     ans.back() = ']';
     return ans;
 }
+
+
 
 // 将二叉树序列化为 LeetCode 列表输出
 //
@@ -757,7 +762,7 @@ inline ostream& operator<<(ostream& cout, queue<T> q) {
 //
 // 输出:
 //
-// | 1 - 2 - 3 <<- stack
+// | 1 - 2 - 3 <-stack
 //
 // ---------------------------------------------------------------------------
 //
@@ -791,7 +796,7 @@ void showStack(stack<T> stk, bool newLine = true) {
             cout << " - " << v[i];
         }
     }
-    cout << " <<- stack";
+    cout << " <-stack";
     if (newLine)
         cout << endl;
 }
@@ -810,7 +815,7 @@ void showStack(stack<T> stk, bool newLine = true) {
 //
 // 输出:
 //
-// | 1 - 2 - 3 <<- stack
+// | 1 - 2 - 3 <-stack
 //
 // ---------------------------------------------------------------------------
 //
@@ -942,6 +947,6 @@ ostream& operator<<(ostream& cout, ListNode* head) {
     return cout;
 }
 
-}
+} // namespace LC
 
 #endif // _LEETCODE_AKASHI_HPP_

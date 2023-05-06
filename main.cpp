@@ -2,7 +2,8 @@
 using namespace LC;
 
 int main() {
-    auto vec = build_vector<vector<int>>("[[1, 2], [3, 4], [5]]");
+    auto vec = build_vector<int>("[1,2,3]");
+    buildTree(vec);
     cout << vec << endl;
     return 0;
 }
