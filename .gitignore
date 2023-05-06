@@ -10,3 +10,4 @@
 *.hpp
 !main.cpp
 !leetcode.hpp
+!images/
