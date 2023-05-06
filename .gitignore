@@ -1,0 +1,12 @@
+.vs
+.vscode
+*.sln
+*.vcxproj.filters
+*/
+*.vcxproj
+*.vcxproj.user
+*.exe
+*.cpp
+*.hpp
+!main.cpp
+!leetcode.hpp
