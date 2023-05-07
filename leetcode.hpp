@@ -3,7 +3,7 @@
 |*     / \    | | __   __ _   ___  | |__   (_)    LeetCode with C++     *|
 |*    / _ \   | |/ /  / _` | / __| | '_ \  | |    data:    2023-4-5     *|
 |*   / ___ \  |   <  | (_| | \__ \ | | | | | |    author:  Akashi       *|
-|*  /_/   \_\ |_|\_\  \__,_| |___/ |_| |_| |_|    version: 0.0.1        *|
+|*  /_/   \_\ |_|\_\  \__,_| |___/ |_| |_| |_|    version: 0.0.1 demo   *|
 |*                                                                      *|
 |*     github:  https://github.com/AkashiNeko/LeetCode-Debugger         *|
 |*                                                                      *|
@@ -532,7 +532,7 @@ inline ostream& operator<<(ostream& cout, vector<T> vec) {
 // //          / \
 // //         4   5
 // 
-// string str = treeToString(root)
+// string str = tree2str(root)
 // 
 // cout << str << endl;
 // 
@@ -542,7 +542,7 @@ inline ostream& operator<<(ostream& cout, vector<T> vec) {
 //
 // ---------------------------------------------------------------------------
 
-string treeToString(TreeNode* root) {
+string tree2str(TreeNode* root) {
     if (!root)
         return "[]";
     queue<TreeNode*> q;
@@ -595,7 +595,7 @@ string treeToString(TreeNode* root) {
 // ---------------------------------------------------------------------------
 
 inline ostream& operator<<(ostream& cout, TreeNode* root) {
-    return cout << treeToString(root);
+    return cout << tree2str(root);
 }
 
 
@@ -604,7 +604,7 @@ inline ostream& operator<<(ostream& cout, TreeNode* root) {
 // 
 // --------------------------------- Example ---------------------------------
 // 
-// TreeNode* root = buildTree("[1,2,3,null,null,4,5]");
+// TreeNode* root = build_tree("[1,2,3,null,null,4,5]");
 // 
 // // root -> 1
 // //        / \
@@ -614,7 +614,7 @@ inline ostream& operator<<(ostream& cout, TreeNode* root) {
 //
 // ---------------------------------------------------------------------------
 
-TreeNode* buildTree(string data) {
+TreeNode* build_tree(string data) {
     if (data == "[]") return nullptr;
     size_t sz = data.size();
     data.back() = ',';
@@ -672,7 +672,7 @@ TreeNode* buildTree(string data) {
 
 inline TreeNode* operator""_tree(const char* arg, size_t n) {
     string s(arg, n);
-    return buildTree(s);
+    return build_tree(s);
 }
 
 
@@ -687,7 +687,7 @@ inline TreeNode* operator""_tree(const char* arg, size_t n) {
 // 
 // queue<int> q({1, 2, 3});
 // 
-// showQueue(q);
+// show_queue(q);
 //
 // 输出:
 //
@@ -698,7 +698,7 @@ inline TreeNode* operator""_tree(const char* arg, size_t n) {
 // 你也可以使用 "cout << queueObject" 查看队列中的元素
 
 template<class T>
-void showQueue(queue<T>& q, bool newLine = true) {
+void show_queue(queue<T>& q, bool newLine = true) {
     if (q.empty()) {
         cout << "queue<" << typeid(T).name() << ">: []" << endl;
         return;
@@ -738,11 +738,11 @@ void showQueue(queue<T>& q, bool newLine = true) {
 // 
 // ---------------------------------------------------------------------------
 // 
-// 你也可以使用 "showQueue(queueObject)" 查看队列中的元素
+// 你也可以使用 "show_queue(queueObject)" 查看队列中的元素
 
 template <class T>
 inline ostream& operator<<(ostream& cout, queue<T> q) {
-    showQueue<T>(q, false);
+    show_queue<T>(q, false);
     return cout;
 }
 
@@ -758,7 +758,7 @@ inline ostream& operator<<(ostream& cout, queue<T> q) {
 //
 // stack<int> stk({1, 2, 3});
 //
-// showStack(stk);
+// show_stack(stk);
 //
 // 输出:
 //
@@ -769,7 +769,7 @@ inline ostream& operator<<(ostream& cout, queue<T> q) {
 // 你也可以使用 "cout << stackObject" 查看栈中的元素
 
 template <class T>
-void showStack(stack<T> stk, bool newLine = true) {
+void show_stack(stack<T> stk, bool newLine = true) {
     if (stk.empty()) {
         cout << "stack<" << typeid(T).name() << ">: []" << endl;
         return;
@@ -819,11 +819,11 @@ void showStack(stack<T> stk, bool newLine = true) {
 //
 // ---------------------------------------------------------------------------
 //
-// 你也可以使用 "showStack(stackObject)" 查看栈中的元素
+// 你也可以使用 "show_stack(stackObject)" 查看栈中的元素
 
 template <class T>
 inline ostream& operator<<(ostream& cout, stack<int>& stk) {
-    showStack<T>(stk, false);
+    show_stack<T>(stk, false);
     return cout;
 }
 
@@ -833,7 +833,7 @@ inline ostream& operator<<(ostream& cout, stack<int>& stk) {
 //
 // --------------------------------- Example ---------------------------------
 //
-// ListNode* head = buildList("[1,2,3]");
+// ListNode* head = build_list("[1,2,3]");
 //
 // // head --> +---------.  .--> +---------.  .--> +---------.
 // //          | val : 1 |  |    | val : 2 |  |    | val : 3 |
@@ -842,7 +842,7 @@ inline ostream& operator<<(ostream& cout, stack<int>& stk) {
 //
 // ---------------------------------------------------------------------------
 
-ListNode* buildList(string data) {
+ListNode* build_list(string data) {
     static unordered_set<char> chars = { '[', ']', ',', '-' };
     __assert_LC__(data.front() == '[' && data.back() == ']', "输入的 LeetCode 列表不合法");
     size_t sz = data.size(), cnt = 0;
@@ -889,7 +889,7 @@ ListNode* buildList(string data) {
 // ---------------------------------------------------------------------------
 
 inline ListNode* operator""_list(const char* arg, size_t n) {
-    return buildList(string(arg, n));
+    return build_list(string(arg, n));
 }
 
 
@@ -899,7 +899,7 @@ inline ListNode* operator""_list(const char* arg, size_t n) {
 //
 // auto head = "[1,2,3]"_list;
 //
-// showList(head);
+// show_list(head);
 //
 // 输出:
 //
@@ -909,7 +909,7 @@ inline ListNode* operator""_list(const char* arg, size_t n) {
 //
 // 你也可以使用 "cout << headPointer" 查看栈中的元素
 
-void showList(ListNode* ls, bool newLine = true) {
+void show_list(ListNode* ls, bool newLine = true) {
     if (!ls) {
         cout << "list: []";
     }
@@ -940,12 +940,14 @@ void showList(ListNode* ls, bool newLine = true) {
 //
 // ---------------------------------------------------------------------------
 //
-// 你也可以使用 "showList(headPointer)" 查看栈中的元素
+// 你也可以使用 "show_list(headPointer)" 查看栈中的元素
 
 ostream& operator<<(ostream& cout, ListNode* head) {
-    showList(head, false);
+    show_list(head, false);
     return cout;
 }
+
+
 
 } // namespace LC
 
