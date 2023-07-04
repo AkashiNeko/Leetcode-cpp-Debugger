@@ -6,8 +6,5 @@
 *.vcxproj
 *.vcxproj.user
 *.exe
-*.cpp
-*.hpp
-!main.cpp
 !leetcode.hpp
 !images/
