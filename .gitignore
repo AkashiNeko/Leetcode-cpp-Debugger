@@ -1,10 +1,5 @@
-.vs
-.vscode
-*.sln
-*.vcxproj.filters
-*/
-*.vcxproj
-*.vcxproj.user
-*.exe
+*
 !leetcode.hpp
 !images/
+!README.md
+!.gitignore

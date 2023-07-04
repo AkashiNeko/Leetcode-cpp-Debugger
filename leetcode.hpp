@@ -1,7 +1,7 @@
 /************************************************************************\
 |*      _      _                    _       _                           *|
 |*     / \    | | __   __ _   ___  | |__   (_)    LeetCode with C++     *|
-|*    / _ \   | |/ /  / _` | / __| | '_ \  | |    data:    2023-4-5     *|
+|*    / _ \   | |/ /  / _` | / __| | '_ \  | |    data:    2023-7-4     *|
 |*   / ___ \  |   <  | (_| | \__ \ | | | | | |    author:  Akashi       *|
 |*  /_/   \_\ |_|\_\  \__,_| |___/ |_| |_| |_|    version: 0.0.2        *|
 |*                                                                      *|
@@ -49,13 +49,22 @@ namespace LC {
 using namespace std;
 
 namespace ERR {
-    const string BRACKET_MISMATCH = "À¨ºÅÊıÁ¿²»Æ¥Åä";
-    const string QUOTE_MISMATCH = "ÒıºÅ²»Æ¥Åä";
-    const string NOT_INTEGER = "²»ÊÇÕûÊı";
-    const string NOT_NUMBER = "²»ÊÇÊı×Ö";
-    const string NOT_CHAR = "²»ÊÇ×Ö·û";
-    const string INCORRECT_FORMAT = "¸ñÊ½²»ÕıÈ·";
-    const string UNKNOWN_TYPE = "Î´ÖªµÄÀàĞÍ";
+    //const string BRACKET_MISMATCH = "æ‹¬å·æ•°é‡ä¸åŒ¹é…";
+    //const string QUOTE_MISMATCH = "å¼•å·ä¸åŒ¹é…";
+    //const string NOT_INTEGER = "ä¸æ˜¯æ•´æ•°";
+    //const string NOT_NUMBER = "ä¸æ˜¯æ•°å­—";
+    //const string NOT_CHAR = "ä¸æ˜¯å­—ç¬¦";
+    //const string INCORRECT_FORMAT = "æ ¼å¼ä¸æ­£ç¡®";
+    //const string UNKNOWN_TYPE = "æœªçŸ¥çš„ç±»å‹";
+    //const string UNKNOWN_CHAR = "å­˜åœ¨éæ³•å­—ç¬¦";
+    const string BRACKET_MISMATCH = "Mismatched brackets";
+    const string QUOTE_MISMATCH = "Mismatched quotes";
+    const string NOT_INTEGER = "Not an integer";
+    const string NOT_NUMBER = "Not a number";
+    const string NOT_CHAR = "Not a character";
+    const string INCORRECT_FORMAT = "Incorrect format";
+    const string UNKNOWN_TYPE = "Unknown type";
+    const string UNKNOWN_CHAR = "Illegal character detected";
 }
 
 // LeetCode List
@@ -138,11 +147,15 @@ inline string __preproccess_LC__(const string& str) {
             inQuote = !inQuote;
         if (!inQuote) {
             switch (str[i]) {
-            case ' ': continue;
-            case '[': ++stk; break;
+            case ' ': case '\n': case '\t':
+                continue;
+            case '[':
+                ++stk;
+                break;
             case ']':
                 __assert_LC__(stk > 0, ERR::BRACKET_MISMATCH);
-                --stk; break;
+                --stk;
+                break;
             case ',':
                 __assert_LC__(stk > 0, ERR::INCORRECT_FORMAT);
                 break;
@@ -211,11 +224,11 @@ std::vector<int> _range_(int stop) {
 /*************************************  vector  ****************************************/
 
 
-// ´Ó LeetCode ÁĞ±í¹¹ÔìÒ»¸ö T ÀàĞÍµÄ vector
+// ä» LeetCode åˆ—è¡¨æ„é€ ä¸€ä¸ª T ç±»å‹çš„ vector
 //
 // --------------------------------- Example ---------------------------------
 //
-// // ½«ÁĞ±í [1,2,3,4] ×ª»»Îª vector<int>
+// // å°†åˆ—è¡¨ [1,2,3,4] è½¬æ¢ä¸º vector<int>
 //
 // vector<int> vi = build_vector<int>("[1,2,3,4]");
 // 
@@ -275,9 +288,9 @@ vector<T> build_vector(string data) {
             __assert_LC__(elem.size() == 3, ERR::NOT_CHAR);
             value = elem.at(1);
         }
-        else if constexpr (is_vector<T>::value) {
-            using type = VectorTraits<T>::template ValueType;
-            value = build_vector<type>(elem);
+        else if constexpr (LC::is_vector<T>::value) {
+            using value_type = typename VectorTraits<T>::ValueType;
+            value = build_vector<value_type>(elem);
         }
         result.push_back(value);
     }
@@ -286,11 +299,11 @@ vector<T> build_vector(string data) {
 
 
 
-// ´Ó LeetCode ÁĞ±í¹¹ÔìÒ»¸ö int ÀàĞÍµÄ vector
+// ä» LeetCode åˆ—è¡¨æ„é€ ä¸€ä¸ª int ç±»å‹çš„ vector
 //
 // --------------------------------- Example ---------------------------------
 //
-// // ½«ÁĞ±í [1,2,3,4] ×ª»»Îª vector<int>
+// // å°†åˆ—è¡¨ [1,2,3,4] è½¬æ¢ä¸º vector<int>
 // 
 // auto v = "[1,2,3,4]"_vector_int;
 //
@@ -303,11 +316,11 @@ inline vector<int> operator""_vector_int(const char* arg, size_t n) {
 
 
 
-// ´Ó LeetCode ÁĞ±í¹¹ÔìÒ»¸ö long long ÀàĞÍµÄ vector
+// ä» LeetCode åˆ—è¡¨æ„é€ ä¸€ä¸ª long long ç±»å‹çš„ vector
 //
 // --------------------------------- Example ---------------------------------
 //
-// // ½«ÁĞ±í [10000000000,20000000000] ×ª»»Îª vector<long long>
+// // å°†åˆ—è¡¨ [10000000000,20000000000] è½¬æ¢ä¸º vector<long long>
 //
 // auto v = "[10000000000,20000000000]"_vector_long_long;
 //
@@ -320,11 +333,11 @@ inline vector<long long> operator""_vector_long_long(const char* arg, size_t n) 
 
 
 
-// ´Ó LeetCode ÁĞ±í¹¹ÔìÒ»¸ö float ÀàĞÍµÄ vector
+// ä» LeetCode åˆ—è¡¨æ„é€ ä¸€ä¸ª float ç±»å‹çš„ vector
 //
 // --------------------------------- Example ---------------------------------
 //
-// // ½«ÁĞ±í [3.14,2.71,1.41,0.5] ×ª»»Îª vector<float>
+// // å°†åˆ—è¡¨ [3.14,2.71,1.41,0.5] è½¬æ¢ä¸º vector<float>
 //
 // auto v = "[3.14,2.71,1.41,0.5]"_vector_float;
 //
@@ -337,11 +350,11 @@ inline vector<float> operator""_vector_float(const char* arg, size_t n) {
 
 
 
-// ´Ó LeetCode ÁĞ±í¹¹ÔìÒ»¸ö double ÀàĞÍµÄ vector
+// ä» LeetCode åˆ—è¡¨æ„é€ ä¸€ä¸ª double ç±»å‹çš„ vector
 //
 // --------------------------------- Example ---------------------------------
 //
-// // ½«ÁĞ±í [3.1415926,2.71828] ×ª»»Îª vector<double>
+// // å°†åˆ—è¡¨ [3.1415926,2.71828] è½¬æ¢ä¸º vector<double>
 //
 // auto v = "[3.1415926,2.71828]"_vector_double;
 //
@@ -354,17 +367,17 @@ inline vector<double> operator""_vector_double(const char* arg, size_t n) {
 
 
 
-// ´Ó LeetCode ÁĞ±í¹¹ÔìÒ»¸ö string ÀàĞÍµÄ vector
+// ä» LeetCode åˆ—è¡¨æ„é€ ä¸€ä¸ª string ç±»å‹çš„ vector
 //
 // --------------------------------- Example ---------------------------------
 //
-// // ×Ö·û´®ÖĞµÄË«ÒıºÅĞèÒª¼ÓÉÏ·´Ğ±¸Ü
+// // å­—ç¬¦ä¸²ä¸­çš„åŒå¼•å·éœ€è¦åŠ ä¸Šåæ–œæ 
 // 
 // auto v1 = "[\"akashi\",\"neko\"]"_vector_string;
 // 
-// // v1 µÄÀàĞÍÎª vector<string>£¬ÖµÎª { "akashi", "neko" }
+// // v1 çš„ç±»å‹ä¸º vector<string>ï¼Œå€¼ä¸º { "akashi", "neko" }
 // 
-// // ÄãÒ²¿ÉÒÔÊ¹ÓÃ R"()" Ô­Ê¼×Ö·û´®µÄĞÎÊ½
+// // ä½ ä¹Ÿå¯ä»¥ä½¿ç”¨ R"()" åŸå§‹å­—ç¬¦ä¸²çš„å½¢å¼
 // 
 // auto v2 = R"(["akashi","neko"])"_vector_string;
 // 
@@ -377,21 +390,21 @@ inline vector<string> operator""_vector_string(const char* arg, size_t n) {
 
 
 
-// ´Ó LeetCode ÁĞ±í¹¹ÔìÒ»¸ö char ÀàĞÍµÄ vector
+// ä» LeetCode åˆ—è¡¨æ„é€ ä¸€ä¸ª char ç±»å‹çš„ vector
 // 
-// ĞèÒª×¢Òâ£ºLeetCode ×Ö·ûÁĞ±íÖĞµÄ×Ö·û£¬Ê¹ÓÃµÄÊÇË«ÒıºÅ¶ø·Çµ¥ÒıºÅ
+// éœ€è¦æ³¨æ„ï¼šLeetCode å­—ç¬¦åˆ—è¡¨ä¸­çš„å­—ç¬¦ï¼Œä½¿ç”¨çš„æ˜¯åŒå¼•å·è€Œéå•å¼•å·
 // 
-// Èç ["a","b","c","d"]
+// å¦‚ ["a","b","c","d"]
 //
 // --------------------------------- Example ---------------------------------
 // 
-// // ×Ö·û´®ÖĞµÄË«ÒıºÅĞèÒª¼ÓÉÏ·´Ğ±¸Ü
+// // å­—ç¬¦ä¸²ä¸­çš„åŒå¼•å·éœ€è¦åŠ ä¸Šåæ–œæ 
 // 
 // auto v1 = "[\"a\",\"b\",\"c\",\"d\"]"_vector_char;
 // 
-// // v1 µÄÀàĞÍÎª vector<char>£¬ÖµÎª { 'a', 'b', 'c', 'd' }
+// // v1 çš„ç±»å‹ä¸º vector<char>ï¼Œå€¼ä¸º { 'a', 'b', 'c', 'd' }
 // 
-// // ÄãÒ²¿ÉÒÔÊ¹ÓÃ R"()" Ô­Ê¼×Ö·û´®µÄĞÎÊ½
+// // ä½ ä¹Ÿå¯ä»¥ä½¿ç”¨ R"()" åŸå§‹å­—ç¬¦ä¸²çš„å½¢å¼
 // 
 // auto v2 = R"(["a","b","c","d"])"_vector_char;
 //
@@ -404,7 +417,7 @@ inline vector<char> operator""_vector_char(const char* arg, size_t n) {
 
 
 
-// ´òÓ¡Ò»¸ö vector
+// æ‰“å°ä¸€ä¸ª vector
 // 
 // --------------------------------- Example ---------------------------------
 //
@@ -414,7 +427,7 @@ inline vector<char> operator""_vector_char(const char* arg, size_t n) {
 // vector<string> vs = {"akashi", "neko"};
 // show_vector(vs);
 //
-// Êä³ö:
+// è¾“å‡º:
 //
 // 1 2 3
 // [0]: "akashi"
@@ -422,7 +435,7 @@ inline vector<char> operator""_vector_char(const char* arg, size_t n) {
 //
 // ---------------------------------------------------------------------------
 // 
-// ÄãÒ²¿ÉÒÔÊ¹ÓÃ "cout << vectorObject" ´òÓ¡ vector
+// ä½ ä¹Ÿå¯ä»¥ä½¿ç”¨ "cout << vectorObject" æ‰“å° vector
 
 template <class T>
 void show_vector(vector<T>& vec, bool newLine = true) {
@@ -490,16 +503,15 @@ void show_vector(vector<T>& vec, bool newLine = true) {
         LC_Error << ERR::UNKNOWN_TYPE << typeid(T).name();
     }
 
-    if (newLine)
-        cout << endl;
+    if (newLine) cout << endl;
 }
 
 
 
-// ´òÓ¡Ò»¸ö vector
+// æ‰“å°ä¸€ä¸ª vector
 // 
-// Èç¹ûÊÇÒ»Î¬µÄ vector, ÔòÊä³öµÄÄÚÈİ²»»á×Ô¶¯»»ĞĞ
-// ÄãĞèÒªºóÃæ¼ÓÉÏ "<< endl"
+// å¦‚æœæ˜¯ä¸€ç»´çš„ vector, åˆ™è¾“å‡ºçš„å†…å®¹ä¸ä¼šè‡ªåŠ¨æ¢è¡Œ
+// ä½ éœ€è¦åé¢åŠ ä¸Š "<< endl"
 //
 // --------------------------------- Example ---------------------------------
 //
@@ -509,7 +521,7 @@ void show_vector(vector<T>& vec, bool newLine = true) {
 // vector<string> vs = {"akashi", "neko"};
 // cout << vs << endl;
 //
-// Êä³ö:
+// è¾“å‡º:
 //
 // 1 2 3
 // [0]: "akashi"
@@ -517,7 +529,7 @@ void show_vector(vector<T>& vec, bool newLine = true) {
 //
 // ---------------------------------------------------------------------------
 //
-// ÄãÒ²¿ÉÒÔÊ¹ÓÃ "show_vector(vectorObject)" ´òÓ¡ vector
+// ä½ ä¹Ÿå¯ä»¥ä½¿ç”¨ "show_vector(vectorObject)" æ‰“å° vector
 
 template <class T>
 inline ostream& operator<<(ostream& cout, vector<T> vec) {
@@ -527,7 +539,7 @@ inline ostream& operator<<(ostream& cout, vector<T> vec) {
 
 
 
-// ½«¶ş²æÊ÷ĞòÁĞ»¯Îª LeetCode ÁĞ±í
+// å°†äºŒå‰æ ‘åºåˆ—åŒ–ä¸º LeetCode åˆ—è¡¨
 //
 // --------------------------------- Example ---------------------------------
 //
@@ -543,7 +555,7 @@ inline ostream& operator<<(ostream& cout, vector<T> vec) {
 // 
 // cout << str << endl;
 // 
-// Êä³ö:
+// è¾“å‡º:
 // 
 // [1,2,3,null,null,4,5]
 //
@@ -581,7 +593,7 @@ string tree2str(TreeNode* root) {
 
 
 
-// ½«¶ş²æÊ÷ĞòÁĞ»¯Îª LeetCode ÁĞ±íÊä³ö
+// å°†äºŒå‰æ ‘åºåˆ—åŒ–ä¸º LeetCode åˆ—è¡¨è¾“å‡º
 //
 // --------------------------------- Example ---------------------------------
 //
@@ -595,7 +607,7 @@ string tree2str(TreeNode* root) {
 // 
 // cout << root << endl;
 // 
-// Êä³ö:
+// è¾“å‡º:
 // 
 // [1,2,3,null,null,4,5]
 //
@@ -607,7 +619,7 @@ inline ostream& operator<<(ostream& cout, TreeNode* root) {
 
 
 
-// ´Ó LeetCode ÁĞ±í¹¹Ôì¶ş²æÊ÷
+// ä» LeetCode åˆ—è¡¨æ„é€ äºŒå‰æ ‘
 // 
 // --------------------------------- Example ---------------------------------
 // 
@@ -663,7 +675,7 @@ TreeNode* build_tree(string data) {
 
 
 
-// ´Ó LeetCode ÁĞ±í¹¹Ôì¶ş²æÊ÷
+// ä» LeetCode åˆ—è¡¨æ„é€ äºŒå‰æ ‘
 // 
 // --------------------------------- Example ---------------------------------
 // 
@@ -686,9 +698,9 @@ inline TreeNode* operator""_tree(const char* arg, size_t n) {
 
 /***************************************  queue  ***************************************/
 
-// ²é¿´Ò»¸ö¶ÓÁĞÖĞµÄËùÓĞÔªËØ
+// æŸ¥çœ‹ä¸€ä¸ªé˜Ÿåˆ—ä¸­çš„æ‰€æœ‰å…ƒç´ 
 // 
-// ¸´ÖÆÒ»¸öĞÂµÄ¶ÓÁĞ£¬½«ÔªËØÒÀ´Î³ö¶Ó²¢´òÓ¡£¬²»Ó°ÏìÔ­¶ÓÁĞ
+// å¤åˆ¶ä¸€ä¸ªæ–°çš„é˜Ÿåˆ—ï¼Œå°†å…ƒç´ ä¾æ¬¡å‡ºé˜Ÿå¹¶æ‰“å°ï¼Œä¸å½±å“åŸé˜Ÿåˆ—
 //
 // --------------------------------- Example ---------------------------------
 // 
@@ -696,13 +708,13 @@ inline TreeNode* operator""_tree(const char* arg, size_t n) {
 // 
 // show_queue(q);
 //
-// Êä³ö:
+// è¾“å‡º:
 //
 // <- 1 - 2 - 3 <- queue
 // 
 // ---------------------------------------------------------------------------
 // 
-// ÄãÒ²¿ÉÒÔÊ¹ÓÃ "cout << queueObject" ²é¿´¶ÓÁĞÖĞµÄÔªËØ
+// ä½ ä¹Ÿå¯ä»¥ä½¿ç”¨ "cout << queueObject" æŸ¥çœ‹é˜Ÿåˆ—ä¸­çš„å…ƒç´ 
 
 template<class T>
 void show_queue(queue<T>& q, bool newLine = true) {
@@ -729,9 +741,9 @@ void show_queue(queue<T>& q, bool newLine = true) {
 
 
 
-// ²é¿´Ò»¸ö¶ÓÁĞÖĞµÄËùÓĞÔªËØ
+// æŸ¥çœ‹ä¸€ä¸ªé˜Ÿåˆ—ä¸­çš„æ‰€æœ‰å…ƒç´ 
 // 
-// ¸´ÖÆÒ»¸öĞÂµÄ¶ÓÁĞ£¬½«ÔªËØÒÀ´Î³ö¶Ó²¢´òÓ¡£¬²»Ó°ÏìÔ­¶ÓÁĞ
+// å¤åˆ¶ä¸€ä¸ªæ–°çš„é˜Ÿåˆ—ï¼Œå°†å…ƒç´ ä¾æ¬¡å‡ºé˜Ÿå¹¶æ‰“å°ï¼Œä¸å½±å“åŸé˜Ÿåˆ—
 //
 // --------------------------------- Example ---------------------------------
 // 
@@ -739,13 +751,13 @@ void show_queue(queue<T>& q, bool newLine = true) {
 // 
 // cout << q << endl;
 //
-// Êä³ö:
+// è¾“å‡º:
 //
 // <- 1 - 2 - 3 <- queue
 // 
 // ---------------------------------------------------------------------------
 // 
-// ÄãÒ²¿ÉÒÔÊ¹ÓÃ "show_queue(queueObject)" ²é¿´¶ÓÁĞÖĞµÄÔªËØ
+// ä½ ä¹Ÿå¯ä»¥ä½¿ç”¨ "show_queue(queueObject)" æŸ¥çœ‹é˜Ÿåˆ—ä¸­çš„å…ƒç´ 
 
 template <class T>
 inline ostream& operator<<(ostream& cout, queue<T> q) {
@@ -757,9 +769,9 @@ inline ostream& operator<<(ostream& cout, queue<T> q) {
 
 /***************************************  stack  ***************************************/
 
-// ²é¿´Ò»¸öÕ»ÖĞµÄËùÓĞÔªËØ
+// æŸ¥çœ‹ä¸€ä¸ªæ ˆä¸­çš„æ‰€æœ‰å…ƒç´ 
 //
-// ¸´ÖÆÒ»¸öĞÂµÄÕ»£¬È»ºó½«ÔªËØÒÀ´Î³öÕ»£¬²»Ó°ÏìÔ­Õ»
+// å¤åˆ¶ä¸€ä¸ªæ–°çš„æ ˆï¼Œç„¶åå°†å…ƒç´ ä¾æ¬¡å‡ºæ ˆï¼Œä¸å½±å“åŸæ ˆ
 //
 // --------------------------------- Example ---------------------------------
 //
@@ -767,13 +779,13 @@ inline ostream& operator<<(ostream& cout, queue<T> q) {
 //
 // show_stack(stk);
 //
-// Êä³ö:
+// è¾“å‡º:
 //
 // | 1 - 2 - 3 <-stack
 //
 // ---------------------------------------------------------------------------
 //
-// ÄãÒ²¿ÉÒÔÊ¹ÓÃ "cout << stackObject" ²é¿´Õ»ÖĞµÄÔªËØ
+// ä½ ä¹Ÿå¯ä»¥ä½¿ç”¨ "cout << stackObject" æŸ¥çœ‹æ ˆä¸­çš„å…ƒç´ 
 
 template <class T>
 void show_stack(stack<T> stk, bool newLine = true) {
@@ -810,9 +822,9 @@ void show_stack(stack<T> stk, bool newLine = true) {
 
 
 
-// ²é¿´Ò»¸öÕ»ÖĞµÄËùÓĞÔªËØ
+// æŸ¥çœ‹ä¸€ä¸ªæ ˆä¸­çš„æ‰€æœ‰å…ƒç´ 
 //
-// ¸´ÖÆÒ»¸öĞÂµÄÕ»£¬È»ºó½«ÔªËØÒÀ´Î³öÕ»£¬²»Ó°ÏìÔ­Õ»
+// å¤åˆ¶ä¸€ä¸ªæ–°çš„æ ˆï¼Œç„¶åå°†å…ƒç´ ä¾æ¬¡å‡ºæ ˆï¼Œä¸å½±å“åŸæ ˆ
 //
 // --------------------------------- Example ---------------------------------
 //
@@ -820,13 +832,13 @@ void show_stack(stack<T> stk, bool newLine = true) {
 //
 // cout << stk << endl;
 //
-// Êä³ö:
+// è¾“å‡º:
 //
 // | 1 - 2 - 3 <-stack
 //
 // ---------------------------------------------------------------------------
 //
-// ÄãÒ²¿ÉÒÔÊ¹ÓÃ "show_stack(stackObject)" ²é¿´Õ»ÖĞµÄÔªËØ
+// ä½ ä¹Ÿå¯ä»¥ä½¿ç”¨ "show_stack(stackObject)" æŸ¥çœ‹æ ˆä¸­çš„å…ƒç´ 
 
 template <class T>
 inline ostream& operator<<(ostream& cout, stack<int>& stk) {
@@ -836,7 +848,7 @@ inline ostream& operator<<(ostream& cout, stack<int>& stk) {
 
 
 
-// ´Ó LeetCode ÁĞ±í¹¹ÔìÒ»¸öÁ¦¿ÛÁ´±í
+// ä» LeetCode åˆ—è¡¨æ„é€ ä¸€ä¸ªåŠ›æ‰£é“¾è¡¨
 //
 // --------------------------------- Example ---------------------------------
 //
@@ -851,7 +863,7 @@ inline ostream& operator<<(ostream& cout, stack<int>& stk) {
 
 ListNode* build_list(string data) {
     static unordered_set<char> chars = { '[', ']', ',', '-' };
-    __assert_LC__(data.front() == '[' && data.back() == ']', "ÊäÈëµÄ LeetCode ÁĞ±í²»ºÏ·¨");
+    __assert_LC__(data.front() == '[' && data.back() == ']', ERR::INCORRECT_FORMAT);
     size_t sz = data.size(), cnt = 0;
     for (size_t i = 0, j = 0; i < sz && j < sz; ++i, ++j) {
         while (j < sz && data[j] == ' ') {
@@ -860,7 +872,7 @@ ListNode* build_list(string data) {
         if (i != j) {
             data[i] = data[j];
         }
-        __assert_LC__(__isDigit_LC__(data[i]) || chars.count(data[i]), "ÁĞ±íÖĞº¬ÓĞ·Ç·¨×Ö·û");
+        __assert_LC__(__isDigit_LC__(data[i]) || chars.count(data[i]), ERR::UNKNOWN_CHAR);
     }
     sz -= cnt;
     data.resize(sz);
@@ -872,7 +884,7 @@ ListNode* build_list(string data) {
     ListNode* p = &headPre;
     for (size_t i = 1, j; i < sz; i = j + 1) {
         for (j = i; data[j] != ','; ++j);
-        __assert_LC__(j != i, "ÊäÈëµÄ LeetCode ÁĞ±í²»ºÏ·¨, Á½¸ö¶ººÅÖ®¼äÃ»ÓĞÄÚÈİ");
+        __assert_LC__(j != i, "è¾“å…¥çš„ LeetCode åˆ—è¡¨ä¸åˆæ³•, ä¸¤ä¸ªé€—å·ä¹‹é—´æ²¡æœ‰å†…å®¹");
         int cur = stoi(data.substr(i, j - i));
         p->next = new ListNode(cur);
         p = p->next;
@@ -882,7 +894,7 @@ ListNode* build_list(string data) {
 
 
 
-// ´Ó LeetCode ÁĞ±í¹¹ÔìÒ»¸öÁ¦¿ÛÁ´±í
+// ä» LeetCode åˆ—è¡¨æ„é€ ä¸€ä¸ªåŠ›æ‰£é“¾è¡¨
 //
 // --------------------------------- Example ---------------------------------
 //
@@ -900,7 +912,7 @@ inline ListNode* operator""_list(const char* arg, size_t n) {
 }
 
 
-// ²é¿´Ò»¸ö LeetCode Á´±íÖĞµÄËùÓĞÔªËØ
+// æŸ¥çœ‹ä¸€ä¸ª LeetCode é“¾è¡¨ä¸­çš„æ‰€æœ‰å…ƒç´ 
 //
 // --------------------------------- Example ---------------------------------
 //
@@ -908,13 +920,13 @@ inline ListNode* operator""_list(const char* arg, size_t n) {
 //
 // show_list(head);
 //
-// Êä³ö:
+// è¾“å‡º:
 //
 // 1 -> 2 -> 3 -> null
 //
 // ---------------------------------------------------------------------------
 //
-// ÄãÒ²¿ÉÒÔÊ¹ÓÃ "cout << headPointer" ²é¿´Õ»ÖĞµÄÔªËØ
+// ä½ ä¹Ÿå¯ä»¥ä½¿ç”¨ "cout << headPointer" æŸ¥çœ‹æ ˆä¸­çš„å…ƒç´ 
 
 void show_list(ListNode* ls, bool newLine = true) {
     if (!ls) {
@@ -933,7 +945,7 @@ void show_list(ListNode* ls, bool newLine = true) {
 
 
 
-// ²é¿´Ò»¸ö LeetCode Á´±íÖĞµÄËùÓĞÔªËØ
+// æŸ¥çœ‹ä¸€ä¸ª LeetCode é“¾è¡¨ä¸­çš„æ‰€æœ‰å…ƒç´ 
 //
 // --------------------------------- Example ---------------------------------
 //
@@ -941,13 +953,13 @@ void show_list(ListNode* ls, bool newLine = true) {
 //
 // cout << head << endl;
 //
-// Êä³ö:
+// è¾“å‡º:
 //
 // 1 -> 2 -> 3 -> null
 //
 // ---------------------------------------------------------------------------
 //
-// ÄãÒ²¿ÉÒÔÊ¹ÓÃ "show_list(headPointer)" ²é¿´Õ»ÖĞµÄÔªËØ
+// ä½ ä¹Ÿå¯ä»¥ä½¿ç”¨ "show_list(headPointer)" æŸ¥çœ‹æ ˆä¸­çš„å…ƒç´ 
 
 ostream& operator<<(ostream& cout, ListNode* head) {
     show_list(head, false);

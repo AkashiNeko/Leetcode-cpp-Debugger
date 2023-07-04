@@ -14,6 +14,8 @@
 
 构造一个vector。参数data为力扣测试用例列表，如 `"[1,2,3,4]"`。
 
+需要构造何种类型的vector，只需将类型写在 `build_` 之后，如 `build_vector<vector<int>>` 即构造一个二维的vector。
+
 ~~~cpp
 vector<T> build_vector(string data);
 ~~~
@@ -22,22 +24,9 @@ vector<T> build_vector(string data);
 
 ~~~cpp
 vector<int> vec1 = build_vector<int>("[1,2,3,4]");
-// 二维vector同理
+// 高维vector同理
 auto vec2 = build_vector<vector<int>>("[[1,2],[3,4],[5]]");
 ~~~
-
-模板 `T` 支持的数据类型如下表
-
-|一维|二维|三维|
-|:-:|:-:|:-:|
-|`int`|`vector<int>`|`vector<vector<int>>`|
-|`unsigned`|`vector<unsigned>`|❌|
-|`long long`|`vector<long long>`|❌|
-|`unsigned long long`|`vector<unsigned long long>`|❌|
-|`float`|`vector<float>`|❌|
-|`double`|`vector<double>`|❌|
-|`string`|`vector<string>`|❌|
-|`char`|`vector<char>`|`vector<vector<char>>`|
 
 ##### (2) `""_vector..`（不推荐）
 
